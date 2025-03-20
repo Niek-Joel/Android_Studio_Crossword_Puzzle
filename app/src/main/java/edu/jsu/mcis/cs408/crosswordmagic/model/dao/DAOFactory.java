@@ -130,11 +130,18 @@ public class DAOFactory extends SQLiteOpenHelper {
 
                         params = new HashMap<>();
 
-                        /*
+                        // CSV COLUMNS::   0:ROW(int)   1:COL(int)   2:box(int)   3:direction(enum)   4:word(String)   5:clue(String)
+                        // Parameters for Word class: id, puzzleid, row, column, box, word, clue, direction
 
-                        INSERT YOUR CODE HERE
-
-                        */
+                        // Populate hashmap
+                        params.put(properties.getProperty("_id"), String.valueOf(i));
+                        params.put(properties.getProperty("puzzleid"),String.valueOf(puzzleid));
+                        params.put(properties.getProperty("row"), fields[0]);
+                        params.put(properties.getProperty("column"), fields[1]);
+                        params.put(properties.getProperty("box"), fields[2]);
+                        params.put(properties.getProperty("word"), fields[4]);
+                        params.put(properties.getProperty("clue"), fields[5]);
+                        params.put(properties.getProperty("direction"), fields[3]);
 
                         Word newWord = new Word(params);
 
