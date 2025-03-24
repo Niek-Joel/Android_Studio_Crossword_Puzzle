@@ -147,11 +147,14 @@ public class WordDAO {
 
                 HashMap<String, String> params = new HashMap<>();
 
-                /*
-
-                INSERT YOUR CODE HERE
-
-                */
+                params.put(daoFactory.getProperty("sql_field_id"), cursor.getString(0));
+                params.put(daoFactory.getProperty("sql_field_puzzleid"), cursor.getString(1));
+                params.put(daoFactory.getProperty("sql_field_row"), cursor.getString(2));
+                params.put(daoFactory.getProperty("sql_field_column"), cursor.getString(3));
+                params.put(daoFactory.getProperty("sql_field_box"), cursor.getString(4));
+                params.put(daoFactory.getProperty("sql_field_direction"), cursor.getString(5));
+                params.put(daoFactory.getProperty("sql_field_word"), cursor.getString(6));
+                params.put(daoFactory.getProperty("sql_field_clue"), cursor.getString(7));
 
                 word = new Word(params);
 

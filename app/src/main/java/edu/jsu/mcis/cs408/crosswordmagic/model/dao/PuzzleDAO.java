@@ -97,12 +97,13 @@ public class PuzzleDAO {
             HashMap<String, String> params = new HashMap<>();
 
             /* get data for new puzzle */
-
-            /*
-
-            INSERT YOUR CODE HERE
-
-            */
+            if (cursor.moveToFirst()) {
+                params.put(daoFactory.getProperty("sql_field_id"), cursor.getString(0));
+                params.put(daoFactory.getProperty("sql_field_name"), cursor.getString(1));
+                params.put(daoFactory.getProperty("sql_field_description"), cursor.getString(2));
+                params.put(daoFactory.getProperty("sql_field_height"), cursor.getString(3));
+                params.put(daoFactory.getProperty("sql_field_width"), cursor.getString(4));
+            }
 
             if ( !params.isEmpty() )
                 puzzle = new Puzzle(params);

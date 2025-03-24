@@ -134,14 +134,13 @@ public class DAOFactory extends SQLiteOpenHelper {
                         // Parameters for Word class: id, puzzleid, row, column, box, word, clue, direction
 
                         // Populate hashmap
-                        params.put(properties.getProperty("_id"), String.valueOf(i));
-                        params.put(properties.getProperty("puzzleid"),String.valueOf(puzzleid));
-                        params.put(properties.getProperty("row"), fields[0]);
-                        params.put(properties.getProperty("column"), fields[1]);
-                        params.put(properties.getProperty("box"), fields[2]);
-                        params.put(properties.getProperty("word"), fields[4]);
-                        params.put(properties.getProperty("clue"), fields[5]);
-                        params.put(properties.getProperty("direction"), fields[3]);
+                        params.put(properties.getProperty("sql_field_puzzleid"),String.valueOf(puzzleid));
+                        params.put(properties.getProperty("sql_field_row"), fields[0]);
+                        params.put(properties.getProperty("sql_field_column"), fields[1]);
+                        params.put(properties.getProperty("sql_field_box"), fields[2]);
+                        params.put(properties.getProperty("sql_field_word"), fields[4]);
+                        params.put(properties.getProperty("sql_field_clue"), fields[5]);
+                        params.put(properties.getProperty("sql_field_direction"), fields[3]);
 
                         Word newWord = new Word(params);
 

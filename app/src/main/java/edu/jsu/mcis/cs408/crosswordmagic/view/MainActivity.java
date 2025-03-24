@@ -41,26 +41,27 @@ public class MainActivity extends AppCompatActivity implements AbstractView {
         controller.addModel(model);
         controller.addView(this);
 
-        /* Get Test Property (tests MVC framework) */
 
-        controller.getTestProperty(CrosswordMagicController.TEST_PROPERTY);
 
     }
 
     @Override
     public void modelPropertyChange(final PropertyChangeEvent evt) {
 
-        String name = evt.getPropertyName();
-        String value = evt.getNewValue().toString();
-
-        if (name.equals(CrosswordMagicController.TEST_PROPERTY)) {
-
-            String placeholder = getString(R.string.placeholder_text) + value;
-
-            binding.output.setText(placeholder);
-
-        }
+//        String name = evt.getPropertyName();
+//        String value = evt.getNewValue().toString();
+//
+//        if (name.equals(CrosswordMagicController.TEST_PROPERTY)) {
+//
+//            String placeholder = getString(R.string.placeholder_text) + value;
+//
+//            binding.output.setText(placeholder);
+//
+//        }
 
     }
 
+    public CrosswordMagicController getController() {
+        return controller;
+    }
 }
