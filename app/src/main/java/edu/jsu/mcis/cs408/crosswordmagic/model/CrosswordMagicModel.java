@@ -29,4 +29,30 @@ public class CrosswordMagicModel extends AbstractModel {
 
     }
 
+    public void getCluesAcross() {
+        String cluesAcross = puzzle.getCluesAcross();
+        firePropertyChange(CrosswordMagicController.CLUES_ACROSS_PROPERTY, null, cluesAcross);
+    }
+    public void getCluesDown() {
+        String cluesDown = puzzle.getCluesDown();
+        firePropertyChange(CrosswordMagicController.CLUES_DOWN_PROPERTY, null, cluesDown);
+    }
+
+    public void getGridDimensions() {
+        Integer height = puzzle.getHeight();
+        Integer width = puzzle.getWidth();
+        Integer[] dimension = {height, width};
+        firePropertyChange(CrosswordMagicController.GRID_DIMENSION_PROPERTY, null, dimension);
+    }
+
+    public void getGridLetters() {
+        Character[][] letters = puzzle.getLetters();
+        firePropertyChange(CrosswordMagicController.GRID_LETTERS_PROPERTY, null, letters);
+    }
+
+    public void getGridNumbers() {
+        Integer[][] numbers = puzzle.getNumbers();
+        firePropertyChange(CrosswordMagicController.GRID_NUMBERS_PROPERTY, null, numbers);
+    }
+
 }

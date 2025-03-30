@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:tag="layout_puzzle"
+    android:background="@color/white"
     tools:context=".view.PuzzleFragment">
 
     <edu.jsu.mcis.cs408.crosswordmagic.view.CrosswordGridView

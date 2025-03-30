@@ -39,16 +39,17 @@ public class ClueFragment extends Fragment implements AbstractView {
         /* get controller, register Fragment as a View */
         this.controller = ((MainActivity)getContext()).getController();
         controller.addView(this);
-        fillClues();
+
+        /* Filling clues fragment:
+        Get clues from controller (controller gets clues from model) */
+        controller.getCluesAcross();
+        controller.getCluesDown();
     }
 
-    public void fillClues() {
-        // Get clues from controller (controller gets clues from model)
-        String cluesAcross = controller.getCluesAcross(this);
-        String cluesDown = controller.getCluesDown(this);
-
-        // Fill clues into textViews
+    public void setCluesAcross(String cluesAcross) {
         binding.aContainer.setText(cluesAcross);
+    }
+    public void setCluesDown(String cluesDown) {
         binding.dContainer.setText(cluesDown);
     }
 

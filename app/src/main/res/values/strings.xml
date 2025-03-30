@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">Crossword Magic</string>
     <string name="placeholder_text">"Number of Words in Default Puzzle: "</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="clue_header_across">Across</string>
     <string name="clue_header_down">Down</string>

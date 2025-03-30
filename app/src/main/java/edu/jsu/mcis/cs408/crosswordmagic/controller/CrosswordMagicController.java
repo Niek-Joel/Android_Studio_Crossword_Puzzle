@@ -8,7 +8,9 @@ import java.beans.PropertyChangeEvent;
 
 import edu.jsu.mcis.cs408.crosswordmagic.model.Puzzle;
 import edu.jsu.mcis.cs408.crosswordmagic.model.dao.DAOFactory;
+import edu.jsu.mcis.cs408.crosswordmagic.view.AbstractView;
 import edu.jsu.mcis.cs408.crosswordmagic.view.ClueFragment;
+import edu.jsu.mcis.cs408.crosswordmagic.view.PuzzleFragment;
 
 public class CrosswordMagicController extends AbstractController {
 
@@ -16,6 +18,8 @@ public class CrosswordMagicController extends AbstractController {
     public static final String GRID_LETTERS_PROPERTY = "GridLetters";
     public static final String GRID_NUMBERS_PROPERTY = "GridNumbers";
     public static final String GRID_DIMENSION_PROPERTY = "GridDimensions";
+    public static final String CLUES_ACROSS_PROPERTY = "CluesAcross";
+    public static final String CLUES_DOWN_PROPERTY = "CluesDown";
     DAOFactory daoFactory;
     public void getTestProperty(String value) {
         getModelProperty(TEST_PROPERTY);
@@ -30,20 +34,32 @@ public class CrosswordMagicController extends AbstractController {
         getModelProperty(GRID_NUMBERS_PROPERTY);
     }
 
-    public String getCluesAcross(ClueFragment fragment) {
-        daoFactory = new DAOFactory(fragment.getContext());
-        Puzzle puzzle = daoFactory.getPuzzleDAO().find(1);
-        return puzzle.getCluesAcross();
+    public void getCluesAcross() {
+        getModelProperty(CLUES_ACROSS_PROPERTY);
     }
 
-    public String getCluesDown(ClueFragment fragment) {
-        daoFactory = new DAOFactory(fragment.getContext());
-        Puzzle puzzle = daoFactory.getPuzzleDAO().find(1);
-        return puzzle.getCluesDown();
+    public void getCluesDown() {
+        getModelProperty(CLUES_DOWN_PROPERTY);
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         super.propertyChange(evt);
+        switch (evt.getPropertyName()) {
+            case CLUES_ACROSS_PROPERTY:
+                for (AbstractView view: views) {
+                    if (view instanceof ClueFragment) {
+                        ((ClueFragment) view).setCluesAcross(evt.getNewValue().toString());
+                    }
+                }
+                break;
+            case CLUES_DOWN_PROPERTY:
+                for (AbstractView view: views) {
+                    if (view instanceof ClueFragment) {
+                        ((ClueFragment) view).setCluesDown(evt.getNewValue().toString());
+                    }
+                }
+                break;
+        }
     }
 }

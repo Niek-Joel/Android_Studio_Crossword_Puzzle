@@ -18,9 +18,10 @@ import edu.jsu.mcis.cs408.crosswordmagic.databinding.FragmentPuzzleBinding;
 public class PuzzleFragment extends Fragment implements AbstractView {
     public static final String TAB_TITLE = "Puzzle";
     public static final String ARG_ID = "puzzleID";
-    CrosswordMagicController controller;
+    private CrosswordMagicController controller;
 
     private FragmentPuzzleBinding binding;
+//    private CrosswordGridView crosswordGridView;
 
 
     @Nullable
@@ -41,4 +42,5 @@ public class PuzzleFragment extends Fragment implements AbstractView {
         this.controller = ((MainActivity)getContext()).getController();
         controller.addView(this);
     }
+
 }

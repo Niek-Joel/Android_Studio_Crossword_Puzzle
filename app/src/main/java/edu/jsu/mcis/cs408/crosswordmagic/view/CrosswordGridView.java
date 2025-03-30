@@ -30,8 +30,8 @@ public class CrosswordGridView extends View implements AbstractView {
 
     private final char BLOCK = '*';
 
-    private final float TEXT_NUMBER_SCALE = 4.75f;
-    private final float TEXT_LETTER_SCALE = 1.5f;
+    private final float TEXT_NUMBER_SCALE = 10f;  // Tablet: 4.75f. New value (10) works better for my phone
+    private final float TEXT_LETTER_SCALE = 4f;   // Tablet: 1.5f. New value (4) works better for my phone
 
     private final Paint gridPaint;
     private final TextPaint gridTextPaint;
