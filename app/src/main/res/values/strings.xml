@@ -4,4 +4,12 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="clue_header_across">Across</string>
     <string name="clue_header_down">Down</string>
+    <string name="dialog_title">Enter Guess</string>
+    <string name="empty">""</string>
+    <string name="across">Across</string>
+    <string name="down">Down</string>
+    <string name="cancel">CANCEL</string>
+    <string name="ok">OK</string>
+    <string name="correct_guess">Congrats, you guessed correctly!</string>
+    <string name="incorrect_guess">Sorry, incorrect guess!</string>
 </resources>

@@ -2,14 +2,18 @@ package edu.jsu.mcis.cs408.crosswordmagic.controller;
 
 import static java.security.AccessController.getContext;
 
+import android.util.Pair;
 import android.view.View;
 
 import java.beans.PropertyChangeEvent;
 
+import edu.jsu.mcis.cs408.crosswordmagic.model.CrosswordMagicModel;
 import edu.jsu.mcis.cs408.crosswordmagic.model.Puzzle;
+import edu.jsu.mcis.cs408.crosswordmagic.model.Word;
 import edu.jsu.mcis.cs408.crosswordmagic.model.dao.DAOFactory;
 import edu.jsu.mcis.cs408.crosswordmagic.view.AbstractView;
 import edu.jsu.mcis.cs408.crosswordmagic.view.ClueFragment;
+import edu.jsu.mcis.cs408.crosswordmagic.view.CrosswordGridView;
 import edu.jsu.mcis.cs408.crosswordmagic.view.PuzzleFragment;
 
 public class CrosswordMagicController extends AbstractController {
@@ -20,7 +24,12 @@ public class CrosswordMagicController extends AbstractController {
     public static final String GRID_DIMENSION_PROPERTY = "GridDimensions";
     public static final String CLUES_ACROSS_PROPERTY = "CluesAcross";
     public static final String CLUES_DOWN_PROPERTY = "CluesDown";
-    DAOFactory daoFactory;
+    public static final String GUESS_PROPERTY = "Guess";
+    private DAOFactory daoFactory;
+    public void tryGuess(String input, Integer boxNum){
+        Pair<Integer, String> pair = new Pair<> (boxNum, input);
+        setModelProperty(GUESS_PROPERTY, pair);
+    }
     public void getTestProperty(String value) {
         getModelProperty(TEST_PROPERTY);
     }
@@ -57,6 +66,15 @@ public class CrosswordMagicController extends AbstractController {
                 for (AbstractView view: views) {
                     if (view instanceof ClueFragment) {
                         ((ClueFragment) view).setCluesDown(evt.getNewValue().toString());
+                    }
+                }
+            case GUESS_PROPERTY:
+                for (AbstractView view: views) {
+                    if (view instanceof PuzzleFragment) {
+                        ((PuzzleFragment) view).modelPropertyChange(evt);
+                    }
+                    else if (view instanceof CrosswordGridView) {
+                        ((CrosswordGridView) view).modelPropertyChange(evt);
                     }
                 }
                 break;

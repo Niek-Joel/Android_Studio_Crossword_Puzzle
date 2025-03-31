@@ -1,10 +1,14 @@
 package edu.jsu.mcis.cs408.crosswordmagic.view;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.text.InputType;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
@@ -12,6 +16,9 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -22,6 +29,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import edu.jsu.mcis.cs408.crosswordmagic.R;
 import edu.jsu.mcis.cs408.crosswordmagic.controller.CrosswordMagicController;
 
 public class CrosswordGridView extends View implements AbstractView {
@@ -274,11 +282,20 @@ public class CrosswordGridView extends View implements AbstractView {
             }
 
         }
+        if (name.equals(CrosswordMagicController.GUESS_PROPERTY)) {
+            if (evt.getNewValue() != null) { // Correct guess
+                Toast.makeText(getContext(), R.string.correct_guess, Toast.LENGTH_SHORT).show();
+            }
+            else { // incorrect guess
+                Toast.makeText(getContext(), R.string.incorrect_guess, Toast.LENGTH_SHORT).show();
+            }
+        }
 
     }
 
     private class OnTouchHandler implements View.OnTouchListener {
 
+        private String userInput;
         private Context context;
 
         public OnTouchHandler(Context context) {
@@ -297,19 +314,86 @@ public class CrosswordGridView extends View implements AbstractView {
                 int x = ((eventX - xBegin) / squareWidth);
                 int y = ((eventY - yBegin) / squareHeight);
                 int n = numbers[y][x];
-
                 if (n != 0) {
-                    String text = String.format(Locale.getDefault(),"X: %d, Y: %d, Box: %d", x, y, n);
-                    Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this.context);
+                    builder.setTitle(R.string.dialog_title);
+                    final EditText input = new EditText(this.context);
+                    input.setInputType(InputType.TYPE_CLASS_TEXT);
+                    builder.setView(input);
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            String userInput = input.getText().toString();
+                            userInput = userInput.toUpperCase();
+                            controller.tryGuess(userInput, n);
+
+
+
+
+                        }
+                    });
+                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            String userInput = "";
+                            dialog.cancel();
+                        }
+                    });
+                    AlertDialog aboutDialog = builder.show();
+
+
+//                    final Dialog dialog = new Dialog(this.context);
+//                    dialog.setContentView(R.layout.custom_alert_dialog);
+//                    dialog.setTitle(R.string.dialog_title);
+//                    dialog.setCancelable(false);
+//                    EditText editText = (EditText) dialog.findViewById(R.id.guessInput) ;
+//
+//                    Button buttonCancel = (Button) dialog.findViewById(R.id.buttonCancel);
+//                    buttonCancel.setOnClickListener(new OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            isAcross = true;
+//                            userInput = "";
+//                            dialog.dismiss();
+//                        }
+//                    });
+//
+//                    Button buttonOK = (Button) dialog.findViewById(R.id.buttonOK);
+//                    buttonOK.setOnClickListener(new OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            userInput = editText.getText().toString();
+//                            String key;
+//                            if (isAcross) {
+//                                key = n + "D";
+//                            }
+//                            else {
+//                                key = n + "A";
+//                            }
+//                            controller.tryGuess(n, userInput, key);
+//                        }
+//                    });
+//
+//                    Switch switchOrientation = (Switch) dialog.findViewById(R.id.switchOrientation);
+//                    switchOrientation.setOnClickListener(new OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            if (switchOrientation.isChecked()) {
+//                                isAcross = false;
+//                                switchOrientation.setText(R.string.down);
+//                            }
+//                            else {
+//                                isAcross = true;
+//                                switchOrientation.setText(R.string.across);
+//                            }
+//                        }
+//                    });
+//                    dialog.show();
                 }
-
             }
-
             return false;
-
         }
 
     }
-
 }
 
