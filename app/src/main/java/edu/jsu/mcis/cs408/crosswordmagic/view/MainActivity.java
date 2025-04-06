@@ -41,8 +41,22 @@ public class MainActivity extends AppCompatActivity implements AbstractView {
         controller.addModel(model);
         controller.addView(this);
 
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (controller.getPuzzle() != null) {
+            controller.getPuzzle().saveState(this);
+        }
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (controller.getPuzzle() != null) {
+            controller.getPuzzle().loadState(this);
+        }
     }
 
     @Override

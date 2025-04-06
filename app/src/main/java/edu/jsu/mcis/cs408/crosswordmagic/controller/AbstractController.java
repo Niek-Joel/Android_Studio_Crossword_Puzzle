@@ -13,7 +13,7 @@ import edu.jsu.mcis.cs408.crosswordmagic.view.AbstractView;
 public abstract class AbstractController implements PropertyChangeListener {
 
     protected ArrayList<AbstractView> views;
-    private ArrayList<AbstractModel> models;
+    protected ArrayList<AbstractModel> models;
 
     public AbstractController() {
 

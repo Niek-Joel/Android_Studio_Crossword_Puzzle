@@ -68,4 +68,20 @@ public class CrosswordMagicModel extends AbstractModel {
             firePropertyChange(CrosswordMagicController.GUESS_PROPERTY, null, null);
         }
     }
+
+    public void loadState(Context context) {
+        if (puzzle != null) {
+            puzzle.loadState(context);
+        }
+    }
+
+    public void saveState(Context context) {
+        if (puzzle != null) {
+            puzzle.saveState(context);
+        }
+    }
+
+    public Puzzle getPuzzle() {
+        return puzzle;
+    }
 }

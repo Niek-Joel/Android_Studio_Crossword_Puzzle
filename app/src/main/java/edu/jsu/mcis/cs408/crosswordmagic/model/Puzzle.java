@@ -1,5 +1,7 @@
 package edu.jsu.mcis.cs408.crosswordmagic.model;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -195,6 +197,24 @@ public class Puzzle {
 
         }
 
+    }
+
+    public void saveState(Context context) {
+        SharedPreferences stateInfo = context.getSharedPreferences("CrosswordMagic", context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = stateInfo.edit();
+        editor.putString("guessed_words", String.join(",", guessed));
+        editor.apply();
+    }
+
+    public void loadState(Context context) {
+        SharedPreferences state = context.getSharedPreferences("CrosswordMagic", Context.MODE_PRIVATE);
+        String guesses = state.getString("guessed_words", "");
+        if (!guesses.isEmpty()) {
+            String[] keys = guesses.split(",");
+            for (String key : keys) {
+                addWordToGuessed(key);
+            }
+        }
     }
 
     public Word getWord(String key) {

@@ -2,11 +2,13 @@ package edu.jsu.mcis.cs408.crosswordmagic.controller;
 
 import static java.security.AccessController.getContext;
 
+import android.content.Context;
 import android.util.Pair;
 import android.view.View;
 
 import java.beans.PropertyChangeEvent;
 
+import edu.jsu.mcis.cs408.crosswordmagic.model.AbstractModel;
 import edu.jsu.mcis.cs408.crosswordmagic.model.CrosswordMagicModel;
 import edu.jsu.mcis.cs408.crosswordmagic.model.Puzzle;
 import edu.jsu.mcis.cs408.crosswordmagic.model.Word;
@@ -25,7 +27,9 @@ public class CrosswordMagicController extends AbstractController {
     public static final String CLUES_ACROSS_PROPERTY = "CluesAcross";
     public static final String CLUES_DOWN_PROPERTY = "CluesDown";
     public static final String GUESS_PROPERTY = "Guess";
-    private DAOFactory daoFactory;
+    private Puzzle puzzle;
+
+
     public void tryGuess(String input, Integer boxNum){
         Pair<Integer, String> pair = new Pair<> (boxNum, input);
         setModelProperty(GUESS_PROPERTY, pair);
@@ -79,5 +83,30 @@ public class CrosswordMagicController extends AbstractController {
                 }
                 break;
         }
+    }
+
+    public void loadState(Context context) {
+        for (AbstractModel model : models) {
+            if (model instanceof CrosswordMagicModel) {
+                ((CrosswordMagicModel) model).loadState(context);
+            }
+        }
+    }
+
+    public void saveState(Context context) {
+        for (AbstractModel model : models) {
+            if (model instanceof CrosswordMagicModel) {
+                ((CrosswordMagicModel) model).saveState(context);
+            }
+        }
+    }
+
+    public Puzzle getPuzzle() {
+        for (AbstractModel model : models) {
+            if (model instanceof CrosswordMagicModel) {
+                return ((CrosswordMagicModel) model).getPuzzle();
+            }
+        }
+        return null;
     }
 }
