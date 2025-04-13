@@ -27,6 +27,7 @@ public class CrosswordMagicController extends AbstractController {
     public static final String CLUES_ACROSS_PROPERTY = "CluesAcross";
     public static final String CLUES_DOWN_PROPERTY = "CluesDown";
     public static final String GUESS_PROPERTY = "Guess";
+    public static final String PUZZLE_LIST_PROPERTY = "PuzzleList";
     private Puzzle puzzle;
 
 
@@ -55,6 +56,10 @@ public class CrosswordMagicController extends AbstractController {
         getModelProperty(CLUES_DOWN_PROPERTY);
     }
 
+    public void getPuzzleList() {
+        getModelProperty(PUZZLE_LIST_PROPERTY);
+    }
+
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         super.propertyChange(evt);
@@ -79,6 +84,13 @@ public class CrosswordMagicController extends AbstractController {
                     }
                     else if (view instanceof CrosswordGridView) {
                         ((CrosswordGridView) view).modelPropertyChange(evt);
+                    }
+                }
+                break;
+            case PUZZLE_LIST_PROPERTY:
+                for (AbstractView view: views) {
+                    if (view instanceof PuzzleFragment) {
+
                     }
                 }
                 break;

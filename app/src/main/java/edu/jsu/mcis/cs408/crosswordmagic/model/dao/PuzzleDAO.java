@@ -13,18 +13,21 @@ import com.opencsv.*;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import edu.jsu.mcis.cs408.crosswordmagic.R;
 import edu.jsu.mcis.cs408.crosswordmagic.model.Puzzle;
+import edu.jsu.mcis.cs408.crosswordmagic.model.PuzzleListItem;
 import edu.jsu.mcis.cs408.crosswordmagic.model.Word;
 import edu.jsu.mcis.cs408.crosswordmagic.model.WordDirection;
 
 public class PuzzleDAO {
 
     private final DAOFactory daoFactory;
+    private SQLiteDatabase db;
 
     PuzzleDAO(DAOFactory daoFactory) {
         this.daoFactory = daoFactory;
@@ -61,6 +64,8 @@ public class PuzzleDAO {
         values.put(width, newPuzzle.getWidth());
 
         key = (int)db.insert(daoFactory.getProperty("sql_table_puzzles"), null, values);
+
+        this.db = db;
 
         return key;
 
@@ -150,6 +155,37 @@ public class PuzzleDAO {
 
         return puzzle;
 
+    }
+
+    // Retrieves list of puzzles from DB
+    public PuzzleListItem[] listPuzzles(SQLiteDatabase db) {
+        ArrayList<PuzzleListItem> puzzles = new ArrayList<>();
+
+        // Query db for ID and Name (ordered by name)
+        String query = daoFactory.getProperty("sql_get_puzzles");
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                int id = cursor.getInt(0);
+                String name = cursor.getString(1);
+                puzzles.add(new PuzzleListItem(id, name));
+            }
+            while (cursor.moveToNext());
+            cursor.close();
+        }
+
+        // Convert arrayList to array and return
+        return puzzles.toArray(new PuzzleListItem[]{});
+    }
+
+    public SQLiteDatabase getDb() {
+        if (this.db != null) {
+            return this.db;
+        }
+        else {
+            return daoFactory.getWritableDatabase();
+        }
     }
 
 }

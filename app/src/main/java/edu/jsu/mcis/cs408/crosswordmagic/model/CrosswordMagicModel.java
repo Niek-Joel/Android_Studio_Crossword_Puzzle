@@ -1,6 +1,7 @@
 package edu.jsu.mcis.cs408.crosswordmagic.model;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import android.util.Pair;
 
@@ -16,13 +17,23 @@ public class CrosswordMagicModel extends AbstractModel {
     private Puzzle puzzle;
     private CrosswordGridView gridView;
     private CrosswordMagicController controller;
+    private DAOFactory daoFactory;
 
     public CrosswordMagicModel(Context context) {
 
-        DAOFactory daoFactory = new DAOFactory(context);
-        PuzzleDAO puzzleDAO = daoFactory.getPuzzleDAO();
+        DAOFactory daoFactoryInternal = new DAOFactory(context);
+        PuzzleDAO puzzleDAO = daoFactoryInternal.getPuzzleDAO();
 
         this.puzzle = puzzleDAO.find(DEFAULT_PUZZLE_ID);
+        this.daoFactory = daoFactoryInternal;
+    }
+    public CrosswordMagicModel(Context context, Integer puzzleid) {
+
+        DAOFactory daoFactoryInternal = new DAOFactory(context);
+        PuzzleDAO puzzleDAO = daoFactoryInternal.getPuzzleDAO();
+
+        this.puzzle = puzzleDAO.find(puzzleid);
+        this.daoFactory = daoFactoryInternal;
     }
     public void getTestProperty() {
 
@@ -55,6 +66,12 @@ public class CrosswordMagicModel extends AbstractModel {
     public void getGridNumbers() {
         Integer[][] numbers = puzzle.getNumbers();
         firePropertyChange(CrosswordMagicController.GRID_NUMBERS_PROPERTY, null, numbers);
+    }
+
+    public void getPuzzleList() {
+        SQLiteDatabase db = daoFactory.getPuzzleDAO().getDb();
+        PuzzleListItem[] puzzles = daoFactory.getPuzzleDAO().listPuzzles(db);
+        firePropertyChange(CrosswordMagicController.PUZZLE_LIST_PROPERTY, null, puzzles);
     }
 
     public void setGuess(Pair<Integer, String> pair) {
