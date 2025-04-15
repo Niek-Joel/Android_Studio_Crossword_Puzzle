@@ -15,6 +15,7 @@ public class PuzzleListItem {
     public Integer getId() {
         return id;
     }
+    public String getName() { return name;}
 
     @NonNull
     public String toString() {

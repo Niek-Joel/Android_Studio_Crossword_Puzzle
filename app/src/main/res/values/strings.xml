@@ -12,6 +12,8 @@
     <string name="ok">OK</string>
     <string name="correct_guess">Congrats, you guessed correctly!</string>
     <string name="incorrect_guess">Sorry, incorrect guess!</string>
-    <string name="button_play">Play</string>
+    <string name="button_play">Play Puzzle</string>
     <string name="crossword_magic_cover">Crossword Magic Poster Cover</string>
+    <string name="get_new_puzzles">Get New Puzzles</string>
+    <string name="download_and_play">Download and Play</string>
 </resources>

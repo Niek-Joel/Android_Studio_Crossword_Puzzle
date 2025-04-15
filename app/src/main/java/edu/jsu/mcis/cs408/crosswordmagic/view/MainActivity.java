@@ -24,7 +24,6 @@ public class MainActivity extends AppCompatActivity implements AbstractView {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
