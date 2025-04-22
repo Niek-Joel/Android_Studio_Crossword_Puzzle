@@ -1,0 +1,43 @@
+[33mcommit c3c4dd05b92f5170e95ae009d5d9ef54e09f9300[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Joel Cain <fcftreetop@gmail.com>
+Date:   Sun Apr 13 18:10:12 2025 -0500
+
+    Added welcome page
+    
+    Welcome page working. Only one puzzle viewable currently.
+
+[33mcommit 05536d1ff45f10f9312a295fcc59c134d57b34ea[m
+Author: Joel Cain <fcftreetop@gmail.com>
+Date:   Sun Apr 6 17:38:20 2025 -0500
+
+    Puzzle now saves game state on exit
+
+[33mcommit 28ad42469b213c09c9f4591510f2a2ed727cf331[m
+Author: Joel Cain <fcftreetop@gmail.com>
+Date:   Mon Mar 31 17:00:47 2025 -0500
+
+    Puzzle fully functional now. Only issue is it doesn't save progress on app exit.
+
+[33mcommit f50f11d09d62f7eddf7d543f7cc336dbedc32873[m
+Author: Joel Cain <fcftreetop@gmail.com>
+Date:   Sun Mar 30 14:25:27 2025 -0500
+
+    Puzzle and Clues both displaying. Modified some formatting to display better on Phone
+
+[33mcommit 2f42a264514c642a455b9e096df7d8794dbb88b3[m
+Author: Joel Cain <fcftreetop@gmail.com>
+Date:   Sun Mar 23 19:25:18 2025 -0500
+
+    DAOs finished. Clues now displaying. Puzzle not displaying yet
+
+[33mcommit 272657ad40d069d3fe682ec0710b05ed9acd4743[m
+Author: Joel Cain <fcftreetop@gmail.com>
+Date:   Wed Mar 19 21:54:23 2025 -0500
+
+    DAOFactory finished
+
+[33mcommit d5e48186f32fde23627ce53a8488c3912ec15063[m
+Author: Joel Cain <jcain1@stu.jsu.edu>
+Date:   Tue Mar 18 12:52:14 2025 -0500
+
+    Initial commit
