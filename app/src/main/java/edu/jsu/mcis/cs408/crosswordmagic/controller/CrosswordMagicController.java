@@ -16,7 +16,10 @@ import edu.jsu.mcis.cs408.crosswordmagic.model.dao.DAOFactory;
 import edu.jsu.mcis.cs408.crosswordmagic.view.AbstractView;
 import edu.jsu.mcis.cs408.crosswordmagic.view.ClueFragment;
 import edu.jsu.mcis.cs408.crosswordmagic.view.CrosswordGridView;
+import edu.jsu.mcis.cs408.crosswordmagic.view.MainActivity;
+import edu.jsu.mcis.cs408.crosswordmagic.view.MenuActivity;
 import edu.jsu.mcis.cs408.crosswordmagic.view.PuzzleFragment;
+import edu.jsu.mcis.cs408.crosswordmagic.view.WelcomeActivity;
 
 public class CrosswordMagicController extends AbstractController {
 
@@ -28,6 +31,8 @@ public class CrosswordMagicController extends AbstractController {
     public static final String CLUES_DOWN_PROPERTY = "CluesDown";
     public static final String GUESS_PROPERTY = "Guess";
     public static final String PUZZLE_LIST_PROPERTY = "PuzzleList";
+    public static final String PUZZLE_MENU_PROPERTY = "PuzzleMenu";
+    public static final String DOWNLOAD_PUZZLE_PROPERTY = "DownloadPuzzle";
     private Puzzle puzzle;
 
 
@@ -35,29 +40,33 @@ public class CrosswordMagicController extends AbstractController {
         Pair<Integer, String> pair = new Pair<> (boxNum, input);
         setModelProperty(GUESS_PROPERTY, pair);
     }
-    public void getTestProperty(String value) {
-        getModelProperty(TEST_PROPERTY);
-    }
-    public void getGridDimensions() {
-        getModelProperty(GRID_DIMENSION_PROPERTY);
-    }
-    public void getGridLetters() {
-        getModelProperty(GRID_LETTERS_PROPERTY);
-    }
-    public void getGridNumbers() {
-        getModelProperty(GRID_NUMBERS_PROPERTY);
+
+    public void downloadPuzzle(Integer id) {
+        setModelProperty(DOWNLOAD_PUZZLE_PROPERTY, id);
     }
 
-    public void getCluesAcross() {
-        getModelProperty(CLUES_ACROSS_PROPERTY);
+    public void getGridDimensions() { getModelProperty(GRID_DIMENSION_PROPERTY);}
+    public void getGridLetters() { getModelProperty(GRID_LETTERS_PROPERTY);}
+    public void getGridNumbers() { getModelProperty(GRID_NUMBERS_PROPERTY);}
+    public void getCluesAcross() { getModelProperty(CLUES_ACROSS_PROPERTY);}
+    public void getCluesDown() { getModelProperty(CLUES_DOWN_PROPERTY);}
+    public void getPuzzleList() { getModelProperty(PUZZLE_LIST_PROPERTY);}
+
+    public void getPuzzleMenu() {
+        for (AbstractModel model : models) {
+            if (model instanceof CrosswordMagicModel) {
+                ((CrosswordMagicModel) model).getPuzzleMenu();
+            }
+        }
     }
 
-    public void getCluesDown() {
-        getModelProperty(CLUES_DOWN_PROPERTY);
-    }
-
-    public void getPuzzleList() {
-        getModelProperty(PUZZLE_LIST_PROPERTY);
+    public Puzzle getPuzzle() {
+        for (AbstractModel model : models) {
+            if (model instanceof CrosswordMagicModel) {
+                return ((CrosswordMagicModel) model).getPuzzle();
+            }
+        }
+        return null;
     }
 
     @Override
@@ -77,6 +86,7 @@ public class CrosswordMagicController extends AbstractController {
                         ((ClueFragment) view).setCluesDown(evt.getNewValue().toString());
                     }
                 }
+                break;
             case GUESS_PROPERTY:
                 for (AbstractView view: views) {
                     if (view instanceof PuzzleFragment) {
@@ -87,10 +97,17 @@ public class CrosswordMagicController extends AbstractController {
                     }
                 }
                 break;
-            case PUZZLE_LIST_PROPERTY:
+            case PUZZLE_MENU_PROPERTY:
                 for (AbstractView view: views) {
-                    if (view instanceof PuzzleFragment) {
-
+                    if (view instanceof MenuActivity) {
+                        ((MenuActivity) view).modelPropertyChange(evt);
+                    }
+                }
+                break;
+            case DOWNLOAD_PUZZLE_PROPERTY:  // Update spinner
+                for (AbstractView view: views) {
+                    if (view instanceof WelcomeActivity) {
+                        ((WelcomeActivity) view).modelPropertyChange(evt);
                     }
                 }
                 break;
@@ -113,12 +130,4 @@ public class CrosswordMagicController extends AbstractController {
         }
     }
 
-    public Puzzle getPuzzle() {
-        for (AbstractModel model : models) {
-            if (model instanceof CrosswordMagicModel) {
-                return ((CrosswordMagicModel) model).getPuzzle();
-            }
-        }
-        return null;
-    }
 }

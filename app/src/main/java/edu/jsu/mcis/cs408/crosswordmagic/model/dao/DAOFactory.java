@@ -2,6 +2,7 @@ package edu.jsu.mcis.cs408.crosswordmagic.model.dao;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -32,6 +33,7 @@ public class DAOFactory extends SQLiteOpenHelper {
 
     private static final int CSV_HEADER_FIELDS = 4;
     private static final int CSV_DATA_FIELDS = 6;
+    private WebServiceDAO webServiceDao;
 
     public DAOFactory(Context context) {
 
@@ -72,6 +74,10 @@ public class DAOFactory extends SQLiteOpenHelper {
 
     public WordDAO getWordDAO() {
         return new WordDAO(this);
+    }
+
+    public WebServiceDAO getWebServiceDAO() {
+        return new WebServiceDAO(this);
     }
 
     public String getProperty(String key) {

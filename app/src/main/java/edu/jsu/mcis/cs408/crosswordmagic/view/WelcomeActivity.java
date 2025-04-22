@@ -75,6 +75,13 @@ public class WelcomeActivity extends AppCompatActivity implements AbstractView, 
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 binding.spinner.setAdapter(adapter);
             }
+        } else if (name.equals(CrosswordMagicController.DOWNLOAD_PUZZLE_PROPERTY)) {
+            // TODO: Refresh not currently working
+            // Refresh spinner
+            ArrayAdapter<PuzzleListItem> adapter = (ArrayAdapter<PuzzleListItem>) binding.spinner.getAdapter();
+            if (adapter != null) {
+                adapter.notifyDataSetChanged();
+            }
         }
     }
 

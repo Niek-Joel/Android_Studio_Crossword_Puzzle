@@ -6,8 +6,12 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.beans.PropertyChangeEvent;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import edu.jsu.mcis.cs408.crosswordmagic.controller.CrosswordMagicController;
 import edu.jsu.mcis.cs408.crosswordmagic.databinding.ActivityMenuBinding;
@@ -19,6 +23,8 @@ public class MenuActivity extends AppCompatActivity implements AbstractView{
     private final PuzzleItemClickHandeler itemClick = new PuzzleItemClickHandeler();
     private CrosswordMagicController controller;
     private Integer highlightedPuzzle = null;
+    private RecyclerView recyclerView;
+    private RecyclerViewAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,15 +39,17 @@ public class MenuActivity extends AppCompatActivity implements AbstractView{
         controller.addModel(model);
         controller.addView(this);
 
-        // Request Puzzle list From Server
-        // TODO
+        recyclerView = binding.recyclerOutput;
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        controller.getPuzzleMenu();
 
         // Shift intent to Main Activity
         binding.downloadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Download puzzle
-
+                controller.downloadPuzzle(highlightedPuzzle);
 
                 // Switch activities with new puzzle
                 Intent i = new Intent(MenuActivity.this, MainActivity.class);
@@ -58,7 +66,14 @@ public class MenuActivity extends AppCompatActivity implements AbstractView{
 
     @Override
     public void modelPropertyChange(PropertyChangeEvent evt) {
-
+        switch (evt.getPropertyName()) {
+            case CrosswordMagicController.PUZZLE_MENU_PROPERTY:
+                PuzzleListItem[] menuItems = (PuzzleListItem[])evt.getNewValue();
+                ArrayList<PuzzleListItem> list = new ArrayList<>(Arrays.asList(menuItems));
+                adapter = new RecyclerViewAdapter(list, this);
+                recyclerView.setAdapter(adapter);
+            break;
+        }
     }
 
     private class PuzzleItemClickHandeler implements View.OnClickListener {
