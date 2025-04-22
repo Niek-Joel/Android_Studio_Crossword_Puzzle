@@ -73,6 +73,9 @@ public class MenuActivity extends AppCompatActivity implements AbstractView{
                 adapter = new RecyclerViewAdapter(list, this);
                 recyclerView.setAdapter(adapter);
             break;
+            case CrosswordMagicController.DOWNLOAD_ERROR_DUPLICATE:
+                Toast.makeText(this.getBaseContext(), "Puzzle Already Downloaded \nRedirected To Default Puzzle", Toast.LENGTH_SHORT).show();
+                break;
         }
     }
 

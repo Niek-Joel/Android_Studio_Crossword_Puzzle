@@ -100,11 +100,6 @@ public class CrosswordMagicModel extends AbstractModel {
         }
     }
 
-    // TODO: Maybe not necessary. Properly grab puzzle meta data
-    public void getWebPuzzleMetaData() {
-
-    }
-
     public void setGuess(Pair<Integer, String> pair) {
         Integer boxNum = pair.first;
         String guess = pair.second;
@@ -124,51 +119,73 @@ public class CrosswordMagicModel extends AbstractModel {
         if (jsonObject != null) {
             try {
                 /* get meta data for puzzle */
-                // TODO: Figure out how to grab Puzzle metaData. Currently the JSONObject puzzle returns one layer too deep.
-                //  I.e. clues,words,positions instead of name,description,width,etc.
-//                JSONObject puzzle = daoFactory.getWebServiceDAO().getSelectedPuzzle(webID);
-//                name = jsonObject.getString(daoFactory.getProperty("name"));
-//                String description = jsonObject.getString("description");
-//                String height = jsonObject.getString("height");
-//                String width = jsonObject.getString("width");
+                JSONObject puzzleMetaData = daoFactory.getWebServiceDAO().getSelectedPuzzle(webID);
+                name = puzzleMetaData.getString("name");
 
-                HashMap<String, String> params = new HashMap<>();
-                name = "Online Puzzle #" + webID;
-                params.put(daoFactory.getProperty("sql_field_name"), name);
-                params.put(daoFactory.getProperty("sql_field_description"), "DISCRIPTION PLACEHOLDER");
-                params.put(daoFactory.getProperty("sql_field_height"), "15");
-                params.put(daoFactory.getProperty("sql_field_width"), "15");
-
-                Puzzle puzzle = new Puzzle(params);
-                int puzzleId = daoFactory.getPuzzleDAO().create(puzzle);
-                // set puzzle id?
-
-                // Insert words into puzzle object
-                JSONArray jsonArrayWords = jsonObject.getJSONArray("puzzle");
-                ArrayList<Word> words = new ArrayList<>();
-
-                for (int i=0; i<jsonArrayWords.length(); i++) {
-                    JSONObject jsonObjectWord = jsonArrayWords.getJSONObject(i);
-                    HashMap<String,String> wordParams = new HashMap<>();
-
-                    wordParams.put(Objects.requireNonNull(daoFactory.getProperty("sql_field_puzzleid")), String.valueOf(puzzleId));
-                    wordParams.put(Objects.requireNonNull(daoFactory.getProperty("sql_field_row")), String.valueOf(jsonObjectWord.getInt("row")));
-                    wordParams.put(Objects.requireNonNull(daoFactory.getProperty("sql_field_column")), String.valueOf(jsonObjectWord.getInt("column")));
-                    wordParams.put(Objects.requireNonNull(daoFactory.getProperty("sql_field_box")), String.valueOf(jsonObjectWord.getInt("box")));
-                    wordParams.put(Objects.requireNonNull(daoFactory.getProperty("sql_field_direction")), String.valueOf(jsonObjectWord.getInt("direction")));
-                    wordParams.put(Objects.requireNonNull(daoFactory.getProperty("sql_field_word")), jsonObjectWord.getString("word"));
-                    wordParams.put(Objects.requireNonNull(daoFactory.getProperty("sql_field_clue")), jsonObjectWord.getString("clue"));
-
-                    Word word = new Word(wordParams);
-                    daoFactory.getWordDAO().create(word);
-                    words.add(word);
+                // See if puzzle is already downloaded
+                SQLiteDatabase db = daoFactory.getPuzzleDAO().getDb();
+                PuzzleListItem[] puzzles = daoFactory.getPuzzleDAO().listPuzzles(db);
+                boolean notDownloaded = true;
+                for (PuzzleListItem item: puzzles) {
+                    if (item.getName().equals(name)) {
+                        notDownloaded = false;
+                        break;
+                    }
                 }
+
+                if (notDownloaded) {
+                    String description = puzzleMetaData.getString("description");
+                    String height = puzzleMetaData.getString("height");
+                    String width = puzzleMetaData.getString("width");
+
+                    // Puzzle params
+                    HashMap<String, String> params = new HashMap<>();
+                    params.put(daoFactory.getProperty("sql_field_name"), name);
+                    params.put(daoFactory.getProperty("sql_field_description"), description);
+                    params.put(daoFactory.getProperty("sql_field_height"), height);
+                    params.put(daoFactory.getProperty("sql_field_width"), width);
+
+                    // Create puzzle object using web params
+                    Puzzle puzzle = new Puzzle(params);
+                    int puzzleId = daoFactory.getPuzzleDAO().create(puzzle);
+
+                    // Insert words into puzzle object
+                    JSONArray jsonArrayWords = jsonObject.getJSONArray("puzzle");
+                    ArrayList<Word> words = new ArrayList<>();
+
+                    for (int i=0; i<jsonArrayWords.length(); i++) {
+                        JSONObject jsonObjectWord = jsonArrayWords.getJSONObject(i);
+                        HashMap<String,String> wordParams = new HashMap<>();
+
+                        wordParams.put(Objects.requireNonNull(daoFactory.getProperty("sql_field_puzzleid")), String.valueOf(puzzleId));
+                        wordParams.put(Objects.requireNonNull(daoFactory.getProperty("sql_field_row")), String.valueOf(jsonObjectWord.getInt("row")));
+                        wordParams.put(Objects.requireNonNull(daoFactory.getProperty("sql_field_column")), String.valueOf(jsonObjectWord.getInt("column")));
+                        wordParams.put(Objects.requireNonNull(daoFactory.getProperty("sql_field_box")), String.valueOf(jsonObjectWord.getInt("box")));
+                        wordParams.put(Objects.requireNonNull(daoFactory.getProperty("sql_field_direction")), String.valueOf(jsonObjectWord.getInt("direction")));
+                        wordParams.put(Objects.requireNonNull(daoFactory.getProperty("sql_field_word")), jsonObjectWord.getString("word"));
+                        wordParams.put(Objects.requireNonNull(daoFactory.getProperty("sql_field_clue")), jsonObjectWord.getString("clue"));
+
+                        Word word = new Word(wordParams);
+                        daoFactory.getWordDAO().create(word);
+                        words.add(word);
+                    }
+                }
+                else {
+                    // Reset name back to null if the puzzle already exists in local DB (Name is used to see if the puzzle was downloaded or not)
+                    name = null;
+                }
+
             }
             catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        firePropertyChange(CrosswordMagicController.DOWNLOAD_PUZZLE_PROPERTY, null,name);
+        if (name == null) { // Already downloaded
+            firePropertyChange(CrosswordMagicController.DOWNLOAD_ERROR_DUPLICATE, null,null);
+        }
+        else { // Valid download
+            firePropertyChange(CrosswordMagicController.DOWNLOAD_PUZZLE_PROPERTY, null,name);
+        }
     }
 
     public void loadState(Context context) {

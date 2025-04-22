@@ -4,6 +4,7 @@ import static java.security.AccessController.getContext;
 
 import android.content.Context;
 import android.util.Pair;
+import android.view.Menu;
 import android.view.View;
 
 import java.beans.PropertyChangeEvent;
@@ -33,6 +34,7 @@ public class CrosswordMagicController extends AbstractController {
     public static final String PUZZLE_LIST_PROPERTY = "PuzzleList";
     public static final String PUZZLE_MENU_PROPERTY = "PuzzleMenu";
     public static final String DOWNLOAD_PUZZLE_PROPERTY = "DownloadPuzzle";
+    public static final String DOWNLOAD_ERROR_DUPLICATE = "AlreadyDownloaded";
     private Puzzle puzzle;
 
 
@@ -98,6 +100,7 @@ public class CrosswordMagicController extends AbstractController {
                 }
                 break;
             case PUZZLE_MENU_PROPERTY:
+            case DOWNLOAD_ERROR_DUPLICATE:
                 for (AbstractView view: views) {
                     if (view instanceof MenuActivity) {
                         ((MenuActivity) view).modelPropertyChange(evt);
